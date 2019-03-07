@@ -2,27 +2,26 @@
 // Created by philippe on 03/05/17.
 //
 
-#ifndef PROJECT_WMRobotiqHardwareInterface_H
-#define PROJECT_WMRobotiqHardwareInterface_H
+#ifndef PROJECT_WMLiftingColumnHardwareInterface_H
+#define PROJECT_WMLiftingColumnHardwareInterface_H
 
 #include <hardware_interface/joint_command_interface.h>
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
 #include <string>
 #include <ros/ros.h>
-#include <lifting_column_85_msgs/GripperCmd.h>
-#include <lifting_column_85_msgs/GripperStat.h>
+#include <std_msgs/Int32.h>
 #include <pluginlib/class_list_macros.h>
 
 namespace wm_lifting_column_hardware_interface
 {
-    class WMRobotiqHardwareInterface : public hardware_interface::RobotHW {
+    class WMLiftingColumnHardwareInterface : public hardware_interface::RobotHW {
     public:
         // << ---- H I G H   L E V E L   I N T E R F A C E ---- >>
         // Functions
-        virtual bool init(ros::NodeHandle &root_nh, ros::NodeHandle &robot_hw_nh);
-        virtual void read(const ros::Time &time, const ros::Duration &period);
-        virtual void write(const ros::Time &time, const ros::Duration &period);
+        bool init(ros::NodeHandle &root_nh, ros::NodeHandle &robot_hw_nh) override ;
+        void read(const ros::Time &time, const ros::Duration &period) override;
+        void write(const ros::Time &time, const ros::Duration &period)override;
 
         // Interface variables
         std::string Name;
@@ -30,7 +29,7 @@ namespace wm_lifting_column_hardware_interface
         double pos;
         double vel;
         double eff;
-        void StatusCB( lifting_column_85_msgs::GripperStatConstPtr );
+        void StatusCB( std_msgs::Int32 );
 
     private:
         // Variables
@@ -43,4 +42,4 @@ namespace wm_lifting_column_hardware_interface
 
     };
 }
-#endif //PROJECT_WMRobotiqHardwareInterface_H
+#endif //PROJECT_WMLiftingColumnHardwareInterface_H

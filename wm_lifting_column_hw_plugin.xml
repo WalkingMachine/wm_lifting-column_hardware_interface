@@ -1,5 +1,5 @@
 <library path="lib/libwm_lifting_column_hardware_interface">
-    <class name="wm_lifting_column_hardware_interface/WMRobotiqHardwareInterface" type="wm_lifting_column_hardware_interface::WMRobotiqHardwareInterface" base_class_type="hardware_interface::RobotHW">
+    <class name="wm_lifting_column_hardware_interface/WMLiftingColumnHardwareInterface" type="wm_lifting_column_hardware_interface::WMLiftingColumnHardwareInterface" base_class_type="hardware_interface::RobotHW">
         <description>
             Walking Machine lifting_column hw.
         </description>

@@ -10,7 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
     combined_robot_hw
     controller_manager
     hardware_interface
-    lifting_column_85_msgs
+    std_msgs
     roscpp
 )
 
@@ -38,7 +38,7 @@ include_directories(
 
 
 add_library(${PROJECT_NAME}
-        src/WMRobotiqHardwareInterface.cpp
+        src/WMLiftingColumnHardwareInterface.cpp
         )
 
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
