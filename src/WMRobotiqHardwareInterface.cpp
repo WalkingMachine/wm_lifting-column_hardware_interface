@@ -6,7 +6,7 @@
 #include <nodelet/nodelet.h>
 #include <iostream>
 
-namespace wm_robotiq_hardware_interface {
+namespace wm_lifting_column_hardware_interface {
 
 
     hardware_interface::PositionJointInterface WMRobotiqHardwareInterface::joint_position_interface_;
@@ -37,7 +37,7 @@ namespace wm_robotiq_hardware_interface {
         registerInterface(&joint_position_interface_);
 
         // advertise publisher
-        GripperCtrlPub = root_nh.advertise<robotiq_85_msgs::GripperCmd>( "gripper/cmd", 1 );
+        GripperCtrlPub = root_nh.advertise<lifting_column_85_msgs::GripperCmd>( "gripper/cmd", 1 );
         //GripperStatSub.
         GripperStatSub = root_nh.subscribe( "gripper/stat", 1, &WMRobotiqHardwareInterface::StatusCB, this);
 
@@ -48,12 +48,12 @@ namespace wm_robotiq_hardware_interface {
     }
 
     void WMRobotiqHardwareInterface::write(const ros::Time &time, const ros::Duration &period) {
-        robotiq_85_msgs::GripperCmd msg;
+        lifting_column_85_msgs::GripperCmd msg;
         msg.position = (float)cmd;
         GripperCtrlPub.publish( msg );
     }
 
-    void WMRobotiqHardwareInterface::StatusCB( robotiq_85_msgs::GripperStatConstPtr msg ){
+    void WMRobotiqHardwareInterface::StatusCB( lifting_column_85_msgs::GripperStatConstPtr msg ){
         pos = msg->position;
         eff = msg->current;
     }
@@ -61,4 +61,4 @@ namespace wm_robotiq_hardware_interface {
 }
 
 
-PLUGINLIB_EXPORT_CLASS( wm_robotiq_hardware_interface::WMRobotiqHardwareInterface, hardware_interface::RobotHW)
+PLUGINLIB_EXPORT_CLASS( wm_lifting_column_hardware_interface::WMRobotiqHardwareInterface, hardware_interface::RobotHW)

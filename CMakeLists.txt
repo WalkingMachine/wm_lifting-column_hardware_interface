@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(wm_robotiq_hardware_interface)
+project(wm_lifting_column_hardware_interface)
 SET(CMAKE_CXX_STANDARD 11)
 add_definitions(-std=c++11)
 
@@ -10,7 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
     combined_robot_hw
     controller_manager
     hardware_interface
-    robotiq_85_msgs
+    lifting_column_85_msgs
     roscpp
 )
 
@@ -54,5 +54,5 @@ install(TARGETS ${PROJECT_NAME}
         ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
-install(FILES wm_robotiq_hw_plugin.xml
+install(FILES wm_lifting_column_hw_plugin.xml
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})

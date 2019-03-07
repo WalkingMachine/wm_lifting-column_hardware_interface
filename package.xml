@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>wm_robotiq_hardware_interface</name>
+  <name>wm_lifting_column_hardware_interface</name>
   <version>1.0.0</version>
   <description>The sara_arm package</description>
   <maintainer email="philippe.la-madeleine.1@ens.etsmtl.ca">PhilLM</maintainer>
@@ -41,8 +41,8 @@
   <build_depend>combined_robot_hw</build_depend>
   <run_depend>combined_robot_hw</run_depend>
 
-  <build_depend>robotiq_85_msgs</build_depend>
-  <run_depend>robotiq_85_msgs</run_depend>
+  <build_depend>lifting_column_85_msgs</build_depend>
+  <run_depend>lifting_column_85_msgs</run_depend>
 
   <build_depend>message_generation</build_depend>
   <run_depend>message_runtime</run_depend>
@@ -50,6 +50,6 @@
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <!-- Other tools can request additional information be placed here -->
-    <hardware_interface plugin="${prefix}/wm_robotiq_hw_plugin.xml"/>
+    <hardware_interface plugin="${prefix}/wm_lifting_column_hw_plugin.xml"/>
   </export>
 </package>
