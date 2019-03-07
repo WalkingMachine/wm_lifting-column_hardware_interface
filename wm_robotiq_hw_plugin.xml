@@ -1,0 +1,8 @@
+<library path="lib/libwm_robotiq_hardware_interface">
+    <class name="wm_robotiq_hardware_interface/WMRobotiqHardwareInterface" type="wm_robotiq_hardware_interface::WMRobotiqHardwareInterface" base_class_type="hardware_interface::RobotHW">
+        <description>
+            Walking Machine robotiq hw.
+        </description>
+    </class>
+
+</library>
