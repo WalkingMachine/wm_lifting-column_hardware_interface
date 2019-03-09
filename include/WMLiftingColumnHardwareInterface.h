@@ -34,12 +34,22 @@ namespace wm_lifting_column_hardware_interface
     private:
         // Variables
         ros::NodeHandle nh;
-        static hardware_interface::PositionJointInterface joint_position_interface_;
+        static hardware_interface::VelocityJointInterface joint_velocity_interface_;
         static hardware_interface::JointStateInterface joint_state_interface_;
         std::string port;
         ros::Publisher GripperCtrlPub;
         ros::Subscriber GripperStatSub;
 
+        // Parameters
+        std::string mCmdTopic;
+        std::string mStateTopic;
+        int mMaxCmd;
+        float mMinSpeedUp;
+        float mMaxSpeedUp;
+        float mMinSpeedDown;
+        float mMaxSpeedDown;
+        float mMaxHeight;
+        int mResolution;
     };
 }
 #endif //PROJECT_WMLiftingColumnHardwareInterface_H
