@@ -45,9 +45,9 @@ namespace wm_lifting_column_hardware_interface {
         robot_hw_nh.param<int>("resolution", mResolution, 2387);
 
         // advertise publisher
-        GripperCtrlPub = root_nh.advertise<std_msgs::Int32>( "column/cmd", 1 );
+        CtrlPub = root_nh.advertise<std_msgs::Int32>( "column/cmd", 1 );
         //GripperStatSub.
-        GripperStatSub = root_nh.subscribe( "column/state", 1, &WMLiftingColumnHardwareInterface::StatusCB, this);
+        StatSub = root_nh.subscribe( "column/state", 1, &WMLiftingColumnHardwareInterface::StatusCB, this);
 
         return true;
     }
@@ -74,7 +74,7 @@ namespace wm_lifting_column_hardware_interface {
         // Send the command
         std_msgs::Int32 msg;
         msg.data = (int)cmd;
-        GripperCtrlPub.publish( msg );
+        CtrlPub.publish( msg );
     }
 
     void WMLiftingColumnHardwareInterface::StatusCB( std_msgs::Int32 msg ) {

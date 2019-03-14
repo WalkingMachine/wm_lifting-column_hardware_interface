@@ -37,8 +37,8 @@ namespace wm_lifting_column_hardware_interface
         hardware_interface::VelocityJointInterface joint_velocity_interface_;
         hardware_interface::JointStateInterface joint_state_interface_;
         std::string port;
-        ros::Publisher GripperCtrlPub;
-        ros::Subscriber GripperStatSub;
+        ros::Publisher CtrlPub;
+        ros::Subscriber StatSub;
 
         // Parameters
         std::string mCmdTopic;
