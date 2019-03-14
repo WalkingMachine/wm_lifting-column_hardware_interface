@@ -41,7 +41,7 @@ namespace wm_lifting_column_hardware_interface {
         robot_hw_nh.param<float>("speed_min_up", mMinSpeedUp, 0.0093243243f);
         robot_hw_nh.param<float>("speed_max_down", mMaxSpeedDown, 0.02957988f);
         robot_hw_nh.param<float>("speed_min_down", mMinSpeedDown, 0.010952381f);
-        robot_hw_nh.param<float>("max_height", mMaxHeight, 69);
+        robot_hw_nh.param<float>("max_height", mMaxHeight, 0.69);
         robot_hw_nh.param<int>("resolution", mResolution, 2387);
 
         // advertise publisher
