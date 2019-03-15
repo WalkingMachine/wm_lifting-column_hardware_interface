@@ -35,7 +35,7 @@ namespace wm_lifting_column_hardware_interface {
 
         // Get the parameters
         robot_hw_nh.param<std::string>("cmd_topic", mCmdTopic, "column/cmd");
-        robot_hw_nh.param<std::string>("state_topic", mStateTopic, "column/state");
+        robot_hw_nh.param<std::string>("position_topic", mStateTopic, "column/position");
         robot_hw_nh.param<int>("cmd_max", mMaxCmd, 255);
         robot_hw_nh.param<float>("speed_max_up", mMaxSpeedUp, 0.0279503106f);
         robot_hw_nh.param<float>("speed_min_up", mMinSpeedUp, 0.0093243243f);
@@ -45,9 +45,9 @@ namespace wm_lifting_column_hardware_interface {
         robot_hw_nh.param<int>("resolution", mResolution, 2387);
 
         // advertise publisher
-        CtrlPub = root_nh.advertise<std_msgs::Int32>( "column/cmd", 1 );
+        CtrlPub = root_nh.advertise<std_msgs::Int32>( mCmdTopic, 1 );
         //GripperStatSub.
-        StatSub = root_nh.subscribe( "column/state", 1, &WMLiftingColumnHardwareInterface::StatusCB, this);
+        StatSub = root_nh.subscribe( mStateTopic, 1, &WMLiftingColumnHardwareInterface::StatusCB, this);
 
         return true;
     }
@@ -60,11 +60,11 @@ namespace wm_lifting_column_hardware_interface {
 
         // Apply the speed limits
         if (cmd > mMaxSpeedUp){
-            cmd = mMaxSpeedUp;
+            cmd = mMaxCmd;
         } else if (cmd > mMinSpeedUp){
             cmd *= mMaxCmd/mMaxSpeedUp;
         } else if (cmd < -mMaxSpeedDown){
-            cmd = -mMaxSpeedDown;
+            cmd = -mMaxCmd;
         } else if (cmd < -mMinSpeedDown){
             cmd *= mMaxCmd/mMaxSpeedDown;
         } else {
