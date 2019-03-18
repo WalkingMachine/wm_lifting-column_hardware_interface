@@ -44,6 +44,7 @@ namespace wm_lifting_column_hardware_interface
         std::string mCmdTopic;
         std::string mStateTopic;
         int mMaxCmd;
+        bool ready;
         float mMinSpeedUp;
         float mMaxSpeedUp;
         float mMinSpeedDown;

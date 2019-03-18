@@ -26,6 +26,7 @@ namespace wm_lifting_column_hardware_interface {
         posBuffer = 0;
         vel = 0;
         eff = 0;
+        ready = false;
 
         // Register interfaces
         joint_state_interface_.registerHandle(JointStateHandle(Name, &pos, &vel, &eff));
@@ -48,6 +49,11 @@ namespace wm_lifting_column_hardware_interface {
         CtrlPub = root_nh.advertise<std_msgs::Int32>( mCmdTopic, 1 );
         //GripperStatSub.
         StatSub = root_nh.subscribe( mStateTopic, 1, &WMLiftingColumnHardwareInterface::StatusCB, this);
+
+        while (!ready) {
+            ROS_WARN("Lisfting column is not ready!");
+            sleep(1);
+        }
 
         return true;
     }
@@ -80,6 +86,7 @@ namespace wm_lifting_column_hardware_interface {
     void WMLiftingColumnHardwareInterface::StatusCB( std_msgs::Int32 msg ) {
         // Ajust resolution
         posBuffer = msg.data*mMaxHeight/mResolution;
+        ready = true;
     }
 
 }
