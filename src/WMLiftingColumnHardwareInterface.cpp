@@ -64,8 +64,10 @@ namespace wm_lifting_column_hardware_interface {
 
     void WMLiftingColumnHardwareInterface::write(const ros::Time &time, const ros::Duration &period) {
 
+
+
         // Apply the speed limits
-        if (cmd > mMaxSpeedUp){
+       if (cmd > mMaxSpeedUp){
             cmd = mMaxCmd;
         } else if (cmd > mMinSpeedUp){
             cmd *= mMaxCmd/mMaxSpeedUp;
@@ -73,13 +75,18 @@ namespace wm_lifting_column_hardware_interface {
             cmd = -mMaxCmd;
         } else if (cmd < -mMinSpeedDown){
             cmd *= mMaxCmd/mMaxSpeedDown;
-        } else {
-            cmd = 0;
         }
+
+        vel += (cmd-vel)/1;
+
+        if (vel/mMaxCmd > -mMinSpeedDown && vel/mMaxCmd < mMinSpeedUp) {
+            vel = 0;
+        }
+
 
         // Send the command
         std_msgs::Int32 msg;
-        msg.data = (int)cmd;
+        msg.data = (int)vel;
         CtrlPub.publish( msg );
     }
 
