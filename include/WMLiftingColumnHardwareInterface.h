@@ -38,10 +38,12 @@ namespace wm_lifting_column_hardware_interface
         hardware_interface::JointStateInterface joint_state_interface_;
         std::string port;
         ros::Publisher CtrlPub;
+        ros::Publisher SetPositionPub;
         ros::Subscriber StatSub;
 
         // Parameters
         std::string mCmdTopic;
+        std::string mSetPositionTopic;
         std::string mStateTopic;
         int mMaxCmd;
         bool ready;
@@ -52,6 +54,8 @@ namespace wm_lifting_column_hardware_interface
         float mMaxHeight;
         int mResolution;
         double posBuffer;
+        int mBumperTimeCounter;
+        int mFilteredCmd;
     };
 }
 #endif //PROJECT_WMLiftingColumnHardwareInterface_H
