@@ -65,7 +65,7 @@ namespace wm_lifting_column_hardware_interface {
         pos = posBuffer;
 
         // Check if we reached a bumper by compairing command with velocity
-        if (vel < 0.0001 && vel > 0.0001 && (cmd < -mMinSpeedDown || cmd > mMinSpeedUp) ){
+        if (vel < 0.0001 && vel > -0.0001 && (cmd < -mMinSpeedDown || cmd > mMinSpeedUp) ){
             // Apply a couter to filter out response times.
             mBumperTimeCounter ++;
             if (mBumperTimeCounter == 20){
@@ -105,7 +105,7 @@ namespace wm_lifting_column_hardware_interface {
             tempCmd *= mMaxCmd/mMaxSpeedDown;
         }
 
-        mFilteredCmd += (tempCmd-vel)/1;
+        mFilteredCmd += (tempCmd-mFilteredCmd)/1;
 
         if (mFilteredCmd/mMaxCmd > -mMinSpeedDown && mFilteredCmd/mMaxCmd < mMinSpeedUp) {
             mFilteredCmd = 0;
