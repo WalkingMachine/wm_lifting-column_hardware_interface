@@ -36,6 +36,7 @@ namespace wm_lifting_column_hardware_interface {
 
         // Get the parameters
         robot_hw_nh.param<std::string>("cmd_topic", mCmdTopic, "column/cmd");
+        robot_hw_nh.param<std::string>("set_position_topic", mSetPositionTopic, "column/set_position");
         robot_hw_nh.param<std::string>("position_topic", mStateTopic, "column/position");
         robot_hw_nh.param<int>("cmd_max", mMaxCmd, 255);
         robot_hw_nh.param<float>("speed_max_up", mMaxSpeedUp, 0.0279503106f);
@@ -43,15 +44,16 @@ namespace wm_lifting_column_hardware_interface {
         robot_hw_nh.param<float>("speed_max_down", mMaxSpeedDown, 0.02957988f);
         robot_hw_nh.param<float>("speed_min_down", mMinSpeedDown, 0.010952381f);
         robot_hw_nh.param<float>("max_height", mMaxHeight, 0.69);
-        robot_hw_nh.param<int>("resolution", mResolution, 2387);
+        robot_hw_nh.param<int>("resolution", mResolution, 9560);
 
-        // advertise publisher
+        // advertise publishers
         CtrlPub = root_nh.advertise<std_msgs::Int32>( mCmdTopic, 1 );
+        SetPositionPub = root_nh.advertise<std_msgs::Int32>( mSetPositionTopic, 1 );
         //GripperStatSub.
         StatSub = root_nh.subscribe( mStateTopic, 1, &WMLiftingColumnHardwareInterface::StatusCB, this);
 
         while (!ready) {
-            ROS_WARN("Lisfting column is not ready!");
+            ROS_WARN("Lifting column is not ready!: Waiting for messages in %s", mStateTopic.c_str());
             sleep(1);
         }
 
@@ -59,34 +61,60 @@ namespace wm_lifting_column_hardware_interface {
     }
 
     void WMLiftingColumnHardwareInterface::read(const ros::Time &time, const ros::Duration &period) {
+        vel = (posBuffer-pos)/period.toSec();
         pos = posBuffer;
+
+        // Check if we reached a bumper by compairing command with velocity
+        if (vel < 0.0001 && vel > -0.0001 && (cmd < -mMinSpeedDown || cmd > mMinSpeedUp) ){
+            // Apply a couter to filter out response times.
+            mBumperTimeCounter ++;
+            if (mBumperTimeCounter == 20){
+                // Send the new position
+                std_msgs::Int32 msg;
+                msg.data = cmd > 0 ? mResolution : 0;
+                SetPositionPub.publish( msg );
+            }
+        } else {
+            mBumperTimeCounter = 0;
+
+            // Apply limitations on the position
+            std_msgs::Int32 msg;
+            if (pos > mMaxHeight){
+                pos = mResolution;
+                msg.data = pos;
+                SetPositionPub.publish( msg );
+            } else if (pos < 0){
+                pos = 0;
+                msg.data = pos;
+                SetPositionPub.publish( msg );
+            }
+        }
     }
 
     void WMLiftingColumnHardwareInterface::write(const ros::Time &time, const ros::Duration &period) {
 
-
-
+        double tempCmd;
         // Apply the speed limits
-       if (cmd > mMaxSpeedUp){
-            cmd = mMaxCmd;
+        if (cmd > mMaxSpeedUp){
+            tempCmd = mMaxCmd;
         } else if (cmd > mMinSpeedUp){
-            cmd *= mMaxCmd/mMaxSpeedUp;
+            tempCmd *= mMaxCmd/mMaxSpeedUp;
         } else if (cmd < -mMaxSpeedDown){
-            cmd = -mMaxCmd;
+            tempCmd = -mMaxCmd;
         } else if (cmd < -mMinSpeedDown){
-            cmd *= mMaxCmd/mMaxSpeedDown;
+            tempCmd *= mMaxCmd/mMaxSpeedDown;
         }
 
-        vel += (cmd-vel)/1;
+        mFilteredCmd += (tempCmd-mFilteredCmd)/1;
 
-        if (vel/mMaxCmd > -mMinSpeedDown && vel/mMaxCmd < mMinSpeedUp) {
-            vel = 0;
+        if (mFilteredCmd/mMaxCmd > -mMinSpeedDown && mFilteredCmd/mMaxCmd < mMinSpeedUp) {
+            mFilteredCmd = 0;
         }
 
 
-        // Send the command
+        // Send the mFilteredCmd
         std_msgs::Int32 msg;
-        msg.data = (int)vel;
+        msg.data = mFilteredCmd;
         CtrlPub.publish( msg );
     }
 
