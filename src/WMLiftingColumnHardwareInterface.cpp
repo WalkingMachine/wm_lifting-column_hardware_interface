@@ -114,7 +114,7 @@ namespace wm_lifting_column_hardware_interface {
 
         // Send the mFilteredCmd
         std_msgs::Int32 msg;
-        msg.data = mFilteredCmd;
+        msg.data = int(mFilteredCmd);
         CtrlPub.publish( msg );
     }
 

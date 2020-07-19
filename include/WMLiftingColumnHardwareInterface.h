@@ -55,7 +55,7 @@ namespace wm_lifting_column_hardware_interface
         int mResolution;
         double posBuffer;
         int mBumperTimeCounter;
-        int mFilteredCmd;
+        double mFilteredCmd;
     };
 }
 #endif //PROJECT_WMLiftingColumnHardwareInterface_H
